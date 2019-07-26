@@ -4,7 +4,7 @@ import HomePage from './pages/homepage/homepage';
 
 import './App.css';
 
-const HatsPage = () =>(
+const HatsPage = (props) =>(
   <div>
     <h1>Hats Page</h1>
   </div>
@@ -14,6 +14,7 @@ const HatsPage = () =>(
 
 function App() {
   return (
+      // exact for exact match it returns true
     <div>
       <Route exact path ='/' component= {HomePage} />
       <Route exact path='/hats' component={HatsPage} />

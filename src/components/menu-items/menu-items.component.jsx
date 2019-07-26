@@ -19,4 +19,6 @@ const MenuItems = ({ title, imageUrl, size, linkUrl, history, match }) => {
   );
 };
 
+// to get history and match methods need to import withRouter (best Method)
+// however it can be done by method pooling but it will create problems
 export default withRouter(MenuItems);
