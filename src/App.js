@@ -1,15 +1,8 @@
 import React from 'react';
 import { Route } from 'react-router-dom';
 import HomePage from './pages/homepage/homepage';
-
+import ShopPage from './pages/shoppage/shoppage';
 import './App.css';
-
-const HatsPage = (props) =>(
-  <div>
-    <h1>Hats Page</h1>
-  </div>
-)
-
 
 
 function App() {
@@ -17,7 +10,7 @@ function App() {
       // exact for exact match it returns true
     <div>
       <Route exact path ='/' component= {HomePage} />
-      <Route exact path='/hats' component={HatsPage} />
+      <Route  path='/Shop' component={ShopPage} />
     </div>
   );
 }
