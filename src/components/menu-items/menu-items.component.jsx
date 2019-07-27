@@ -1,22 +1,24 @@
-import React from 'react';
-import './menu-items.styles.scss';
+import React from "react";
+import {withRouter} from 'react-router-dom';
+import "./menu-items.styles.scss";
 
-
-const MenuItems = ({title, imageUrl, size}) => {
-    return(
-        <div 
+const MenuItems = ({ title, imageUrl, size, linkUrl, history, match }) => {
+  return (
+    <div className={`${size} menu-items`} onClick={()=> history.push(`${match.url}${linkUrl}`)}>
+      <div
+        className="background-image"
         style={{
-            backgroundImage: `url(${imageUrl})`
+          backgroundImage: `url(${imageUrl})`
         }}
-        className= {`${size} menu-items`}>
-                <div className='content'>
-                <h1 className= 'title'>{title}</h1>
-                <span className='subtitle'>SHOP NOW</span>
-                </div>
-        </div>
-    )
-    
-}
-    
+      />
+      <div className="content">
+        <h1 className="title">{title.toUpperCase()}</h1>
+        <span className="subtitle">SHOP NOW</span>
+      </div>
+    </div>
+  );
+};
 
-export default MenuItems;
+// to get history and match methods need to import withRouter (best Method)
+// however it can be done by method pooling but it will create problems
+export default withRouter(MenuItems);
