@@ -49,7 +49,7 @@ $main-color: black;
         transition: 300ms ease all;
     }
 
-    &.shrink{
+    .shrink{
         @include shrinkLabel();
     }
 }
