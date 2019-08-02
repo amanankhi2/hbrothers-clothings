@@ -7,34 +7,31 @@ import './App.css';
 import Header from './components/header/header.component';
 import SigninSignup from './pages/signin-and-signup-page/signin-and-signup.component'
 import {auth, createUserProfileDocument} from './firebase/firebase.utils';
+import {connect} from 'react-redux';
+import setCurrentUser from './redux/user/user.actions';
 
 class App extends React.Component {
-  constructor(){
-    super();
-
-    this.state = {
-      currentUser : null
-    };
-  }
+  
 
   unsubscribeFromAuth = null;
 
+  
+
   componentDidMount() {
+    const {setCurrentUser} = this.props;
     this.unsubscribeFromAuth = auth.onAuthStateChanged(async userAuth => {
      if(userAuth){
       const userRef = await createUserProfileDocument(userAuth);
 
       userRef.onSnapshot(snapShot => {
-        this.setState({
-          currentUser: snapShot.id,
+        setCurrentUser({
+          id: snapShot.id,
           ...snapShot.data()
         })
       })
      }
      else{
-      this.setState({
-        currentUser:userAuth
-      });
+      setCurrentUser(userAuth);
      }
     })
   }
@@ -48,7 +45,7 @@ class App extends React.Component {
     return (
       // exact for exact match it returns true
     <div>
-    <Header currentUser={this.state.currentUser}/>
+    <Header />
     <Switch>
       <Route exact path ='/' component= {HomePage} />
       <Route  path='/Shop' component={ShopPage} />
@@ -60,4 +57,9 @@ class App extends React.Component {
   
 }
 
-export default App;
+const mapDispatchtoProps = dispatch => (
+  {
+    setCurrentUser: user => dispatch(setCurrentUser(user))
+  }
+);
+export default connect(null,mapDispatchtoProps)(App);
