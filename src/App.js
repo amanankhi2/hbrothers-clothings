@@ -7,17 +7,22 @@ import CheckoutPage from "./pages/checkoutpage/checkout.page";
 import "./App.css";
 import Header from "./components/header/header.component";
 import SigninSignup from "./pages/signin-and-signup-page/signin-and-signup.component";
-import { auth, createUserProfileDocument } from "./firebase/firebase.utils";
+import {
+  auth,
+  createUserProfileDocument,
+  addCollectionAndDocuments
+} from "./firebase/firebase.utils";
 import { connect } from "react-redux";
 import setCurrentUser from "./redux/user/user.actions";
 import { createStructuredSelector } from "reselect";
 import { selectCurrentUser } from "./redux/user/user.selectors";
+import { selectCollectionsforPreview } from "./redux/shop/shop.selectors";
 
 class App extends React.Component {
   unsubscribeFromAuth = null;
 
   componentDidMount() {
-    const { setCurrentUser } = this.props;
+    const { setCurrentUser, collectionsArray } = this.props;
     this.unsubscribeFromAuth = auth.onAuthStateChanged(async userAuth => {
       if (userAuth) {
         const userRef = await createUserProfileDocument(userAuth);
@@ -28,9 +33,13 @@ class App extends React.Component {
             ...snapShot.data()
           });
         });
-      } else {
-        setCurrentUser(userAuth);
       }
+
+      setCurrentUser(userAuth);
+      addCollectionAndDocuments(
+        "collections",
+        collectionsArray.map(({ title, items }) => ({ title, items })) // generate array of selected entities to store in firebase
+      );
     });
   }
 
@@ -61,7 +70,8 @@ class App extends React.Component {
 }
 
 const mapStatetoProps = createStructuredSelector({
-  currentUser: selectCurrentUser
+  currentUser: selectCurrentUser,
+  collectionsArray: selectCollectionsforPreview
 });
 
 const mapDispatchtoProps = dispatch => ({
